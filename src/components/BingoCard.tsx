@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import GoalModal from "./GoalModal";
 
-const BingoCard = () => {
-  const [goals, setGoals] = useState<string[][]>(
-    Array(5)
-      .fill(null)
-      .map((_, row) =>
-        Array(5)
-          .fill("")
-          .map((_, col) => (row === 2 && col === 2 ? "YOU CAN DO IT!" : ""))
-      )
-  );
+type BingoCardProps = {
+  goals: string[][];
+  setGoals: React.Dispatch<React.SetStateAction<string[][]>>;
+};
+
+const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
   const [selectedBox, setSelectedBox] = useState<{
     row: number;
     col: number;
