@@ -9,6 +9,15 @@ import CreateBingoalCardButton from "../components/CreateBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type RootStackParamList = {
+  Home: undefined;
+  Dashboard: undefined;
+  BingoalCard: undefined;
+  BingoalCardDetail: { card: BingoalCard };
+};
 
 interface BingoalCard {
   id: string;
@@ -18,6 +27,9 @@ interface BingoalCard {
 }
 
 const DashboardScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const [bingoalCards, setBingoalCards] = useState([]);
 
   const loadBingoalCards = async () => {
@@ -41,7 +53,10 @@ const DashboardScreen = () => {
   );
 
   const renderBingoalCard = ({ item }: { item: BingoalCard }) => (
-    <TouchableOpacity style={styles.cardItem}>
+    <TouchableOpacity
+      style={styles.cardItem}
+      onPress={() => navigation.navigate("BingoalCardDetail", { card: item })}
+    >
       <Text style={styles.cardName}>{item.name}</Text>
       <Text style={styles.cardDate}>
         Created: {new Date(item.createdAt).toLocaleDateString()}

@@ -12,17 +12,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DOUBLE_CLICK_DELAY = 300;
 
-const BingoalCardScreen = () => {
-  const [bingoalCardName, setBingoalCardName] = useState("Life Goals");
-  const [goals, setGoals] = useState<string[][]>(
-    Array(5)
-      .fill(null)
-      .map((_, row) =>
-        Array(5)
-          .fill("")
-          .map((_, col) => (row === 2 && col === 2 ? "YOU CAN DO IT!" : ""))
-      )
-  );
+const BingoalCardDetailScreen = ({ route }: any) => {
+  const { card } = route.params;
+  const [bingoalCardName, setBingoalCardName] = useState(card.name);
+  const [goals, setGoals] = useState<string[][]>(card.goals);
 
   const [isEditing, setIsEditing] = useState(false);
   const lastTap = useRef<number | null>(null);
@@ -43,11 +36,11 @@ const BingoalCardScreen = () => {
 
   const saveBingoalCard = async () => {
     try {
-      const cardData = {
-        id: Date.now().toString(),
+      const updatedCard = {
+        ...card,
         name: bingoalCardName,
         goals,
-        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       const existingCardsJson = await AsyncStorage.getItem("bingoalCards");
@@ -55,13 +48,15 @@ const BingoalCardScreen = () => {
         ? JSON.parse(existingCardsJson)
         : [];
 
-      const updatedCards = [...existingCards, cardData];
+      const updatedCards = existingCards.map((existingCard: any) =>
+        existingCard.id === card.id ? updatedCard : existingCard
+      );
 
       await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
 
-      console.log("Bingoal card saved successfully!");
+      console.log("Bingoal card updated successfully!");
     } catch (error) {
-      console.error("Error saving bingoal card:", error);
+      console.error("Error updating bingoal card:", error);
     }
   };
 
@@ -86,7 +81,7 @@ const BingoalCardScreen = () => {
   );
 };
 
-export default BingoalCardScreen;
+export default BingoalCardDetailScreen;
 
 const styles = StyleSheet.create({
   container: {
