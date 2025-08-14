@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import BingoCard from "../components/BingoCard";
 import SaveBingoalCardButton from "../components/SaveBingoalCardButton";
@@ -70,24 +71,42 @@ const BingoalCardDetailScreen = ({ route }: any) => {
     }
   };
 
-  const deleteBingoalCard = async () => {
-    try {
-      const existingCardsJson = await AsyncStorage.getItem("bingoalCards");
-      const existingCards = existingCardsJson
-        ? JSON.parse(existingCardsJson)
-        : [];
+  const deleteBingoalCard = () => {
+    Alert.alert(
+      "Delete Card?",
+      "Are you sure you want to delete this bingo card?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const existingCardsJson = await AsyncStorage.getItem(
+                "bingoalCards"
+              );
+              const existingCards = existingCardsJson
+                ? JSON.parse(existingCardsJson)
+                : [];
 
-      const updatedCards = existingCards.filter(
-        (existingCard: any) => existingCard.id !== card.id
-      );
+              const updatedCards = existingCards.filter(
+                (existingCard: any) => existingCard.id !== card.id
+              );
 
-      await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
+              await AsyncStorage.setItem(
+                "bingoalCards",
+                JSON.stringify(updatedCards)
+              );
 
-      console.log("Bingoal card deleted successfully!");
-      navigation.navigate("Dashboard");
-    } catch (error) {
-      console.error("Error deleting bingoal card:", error);
-    }
+              console.log("Bingoal card deleted successfully!");
+              navigation.navigate("Dashboard");
+            } catch (error) {
+              console.error("Error deleting bingoal card:", error);
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
