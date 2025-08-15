@@ -9,11 +9,30 @@ import {
 import BingoCard from "../components/BingoCard";
 import SaveBingoalCardButton from "../components/SaveBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Toast from "react-native-toast-message";
+
+type RootStackParamList = {
+  Home: undefined;
+  Dashboard: undefined;
+};
 
 const DOUBLE_CLICK_DELAY = 300;
 
 const BingoalCardScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [bingoalCardName, setBingoalCardName] = useState("Life Goals");
+
+  const showCreateToast = () => {
+    Toast.show({
+      type: "success",
+      text1: "Bingoal Card Created",
+      text2: "Your new bingoal card has been created.",
+      position: "bottom",
+    });
+  };
   const [goals, setGoals] = useState<string[][]>(
     Array(5)
       .fill(null)
@@ -60,6 +79,10 @@ const BingoalCardScreen = () => {
       await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
 
       console.log("Bingoal card saved successfully!");
+
+      showCreateToast();
+
+      navigation.navigate("Dashboard");
     } catch (error) {
       console.error("Error saving bingoal card:", error);
     }

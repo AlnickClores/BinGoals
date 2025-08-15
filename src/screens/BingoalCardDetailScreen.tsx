@@ -13,6 +13,7 @@ import DeleteBingoalCardButton from "../components/DeleteBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
   Home: undefined;
@@ -45,6 +46,28 @@ const BingoalCardDetailScreen = ({ route }: any) => {
     setIsEditing(false);
   };
 
+  const showAlterToast = () => {
+    setTimeout(() => {
+      Toast.show({
+        type: "success",
+        text1: "Bingoal Card Updated",
+        text2: "Your changes have been saved.",
+        position: "bottom",
+      });
+    }, 500);
+  };
+
+  const showDeleteToast = () => {
+    setTimeout(() => {
+      Toast.show({
+        type: "success",
+        text1: "Bingoal Card Deleted",
+        text2: "Your bingoal card has been deleted.",
+        position: "bottom",
+      });
+    }, 500);
+  };
+
   const saveBingoalCard = async () => {
     try {
       const updatedCard = {
@@ -62,8 +85,10 @@ const BingoalCardDetailScreen = ({ route }: any) => {
       const updatedCards = existingCards.map((existingCard: any) =>
         existingCard.id === card.id ? updatedCard : existingCard
       );
-
       await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
+      navigation.navigate("Dashboard");
+
+      showAlterToast();
 
       console.log("Bingoal card updated successfully!");
     } catch (error) {
@@ -99,6 +124,9 @@ const BingoalCardDetailScreen = ({ route }: any) => {
               );
 
               console.log("Bingoal card deleted successfully!");
+
+              showDeleteToast();
+
               navigation.navigate("Dashboard");
             } catch (error) {
               console.error("Error deleting bingoal card:", error);

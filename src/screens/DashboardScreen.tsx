@@ -4,6 +4,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import CreateBingoalCardButton from "../components/CreateBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
   Home: undefined;
@@ -40,6 +42,15 @@ const DashboardScreen = () => {
     } catch (error) {
       console.error("Error loading bingoal cards:", error);
     }
+  };
+
+  const showToast = () => {
+    Toast.show({
+      type: "success",
+      text1: "Show Test",
+      text2: "This is a test message",
+      position: "bottom",
+    });
   };
 
   useEffect(() => {
@@ -78,6 +89,7 @@ const DashboardScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.bingoCardsContainer}>
+        <Button title="Click me" onPress={showToast} />
         <Text style={styles.title}>Your Bingo Cards</Text>
         {bingoalCards.length > 0 ? (
           <FlatList
