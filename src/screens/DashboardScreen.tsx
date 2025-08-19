@@ -4,7 +4,6 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import CreateBingoalCardButton from "../components/CreateBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,7 +11,6 @@ import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
   Home: undefined;
@@ -44,15 +42,6 @@ const DashboardScreen = () => {
     }
   };
 
-  const showToast = () => {
-    Toast.show({
-      type: "success",
-      text1: "Show Test",
-      text2: "This is a test message",
-      position: "bottom",
-    });
-  };
-
   useEffect(() => {
     loadBingoalCards();
   }, []);
@@ -69,9 +58,7 @@ const DashboardScreen = () => {
       onPress={() => navigation.navigate("BingoalCardDetail", { card: item })}
     >
       <Text style={styles.cardName}>{item.name}</Text>
-      <Text style={styles.cardDate}>
-        Created: {new Date(item.createdAt).toLocaleDateString()}
-      </Text>
+
       <Text style={styles.cardGoalsCount}>
         Goals filled:{" "}
         {
@@ -83,13 +70,15 @@ const DashboardScreen = () => {
         }
         /24
       </Text>
+      <Text style={styles.cardDate}>
+        Created: {new Date(item.createdAt).toLocaleDateString()}
+      </Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.bingoCardsContainer}>
-        <Button title="Click me" onPress={showToast} />
         <Text style={styles.title}>Your Bingo Cards</Text>
         {bingoalCards.length > 0 ? (
           <FlatList
@@ -116,31 +105,32 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#f1fafb",
   },
   text: {
     fontSize: 24,
   },
   bingoCardsContainer: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f1fafb",
     width: "100%",
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    color: "#161c91",
   },
   cardsList: {
     maxHeight: "70%",
     width: "100%",
   },
   cardItem: {
-    backgroundColor: "orange",
+    backgroundColor: "#16213e",
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
@@ -156,16 +146,17 @@ const styles = StyleSheet.create({
   cardName: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#fff",
     marginBottom: 5,
   },
   cardDate: {
     fontSize: 14,
-    color: "#666",
+    color: "#f2f3f5",
     marginBottom: 5,
   },
   cardGoalsCount: {
     fontSize: 14,
-    color: "#007AFF",
+    color: "#f2f3f5",
     fontWeight: "500",
   },
   emptyMessage: {

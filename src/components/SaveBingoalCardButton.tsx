@@ -15,7 +15,7 @@ const SaveBingoalCardButton = ({ onPress }: SaveBingoalCardButtonProps) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "green",
+    backgroundColor: "#529b39",
     borderRadius: 30,
     width: 60,
     height: 60,

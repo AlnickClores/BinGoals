@@ -15,7 +15,7 @@ const DeleteBingoalCardButton = ({ onPress }: DeleteBingoalCardButtonProps) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "red",
+    backgroundColor: "#ff2a2d",
     borderRadius: 30,
     width: 60,
     height: 60,

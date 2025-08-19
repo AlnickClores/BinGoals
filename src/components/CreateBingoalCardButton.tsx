@@ -26,7 +26,7 @@ export default CreateBingoalCardButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "black",
+    backgroundColor: "#529b39",
     borderRadius: 30,
     width: 60,
     height: 60,
