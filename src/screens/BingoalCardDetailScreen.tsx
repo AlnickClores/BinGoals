@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   Alert,
 } from "react-native";
 import BingoCard from "../components/BingoCard";
-import SaveBingoalCardButton from "../components/SaveBingoalCardButton";
 import DeleteBingoalCardButton from "../components/DeleteBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -32,13 +31,13 @@ const BingoalCardDetailScreen = ({ route }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const lastTap = useRef<number | null>(null);
 
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const handleDoubleTap = () => {
     const now = Date.now();
-
     if (lastTap.current && now - lastTap.current < DOUBLE_CLICK_DELAY) {
       setIsEditing(true);
     }
-
     lastTap.current = now;
   };
 
@@ -46,26 +45,13 @@ const BingoalCardDetailScreen = ({ route }: any) => {
     setIsEditing(false);
   };
 
-  const showAlterToast = () => {
-    setTimeout(() => {
-      Toast.show({
-        type: "success",
-        text1: "Bingoal Card Updated",
-        text2: "Your changes have been saved.",
-        position: "bottom",
-      });
-    }, 500);
-  };
-
   const showDeleteToast = () => {
-    setTimeout(() => {
-      Toast.show({
-        type: "success",
-        text1: "Bingoal Card Deleted",
-        text2: "Your bingoal card has been deleted.",
-        position: "bottom",
-      });
-    }, 500);
+    Toast.show({
+      type: "success",
+      text1: "Bingoal Card Deleted",
+      text2: "Your bingoal card has been deleted.",
+      position: "bottom",
+    });
   };
 
   const saveBingoalCard = async () => {
@@ -85,12 +71,8 @@ const BingoalCardDetailScreen = ({ route }: any) => {
       const updatedCards = existingCards.map((existingCard: any) =>
         existingCard.id === card.id ? updatedCard : existingCard
       );
+
       await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
-      navigation.navigate("Dashboard");
-
-      showAlterToast();
-
-      console.log("Bingoal card updated successfully!");
     } catch (error) {
       console.error("Error updating bingoal card:", error);
     }
@@ -123,10 +105,7 @@ const BingoalCardDetailScreen = ({ route }: any) => {
                 JSON.stringify(updatedCards)
               );
 
-              console.log("Bingoal card deleted successfully!");
-
               showDeleteToast();
-
               navigation.navigate("Dashboard");
             } catch (error) {
               console.error("Error deleting bingoal card:", error);
@@ -136,6 +115,16 @@ const BingoalCardDetailScreen = ({ route }: any) => {
       ]
     );
   };
+
+  useEffect(() => {
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(() => {
+      saveBingoalCard();
+    }, 800);
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    };
+  }, [bingoalCardName, goals]);
 
   return (
     <View style={styles.container}>
@@ -153,8 +142,6 @@ const BingoalCardDetailScreen = ({ route }: any) => {
         </TouchableOpacity>
       )}
       <BingoCard goals={goals} setGoals={setGoals} />
-      <DeleteBingoalCardButton onPress={deleteBingoalCard} />
-      <SaveBingoalCardButton onPress={saveBingoalCard} />
     </View>
   );
 };
@@ -166,10 +153,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#f8fafc",
+    padding: 20,
   },
   bingoalCardName: {
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 28,
+    fontWeight: "700",
+    color: "#1e293b",
+    marginBottom: 20,
+    textAlign: "center",
+    letterSpacing: -0.5,
   },
 });

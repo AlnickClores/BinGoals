@@ -1,5 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 type SaveBingoalCardButtonProps = {
   onPress: () => void;
@@ -8,7 +9,7 @@ type SaveBingoalCardButtonProps = {
 const SaveBingoalCardButton = ({ onPress }: SaveBingoalCardButtonProps) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={{ color: "white", fontWeight: "bold" }}>✓</Text>
+      <Ionicons name="checkmark-outline" size={32} color="#fff" />
     </TouchableOpacity>
   );
 };

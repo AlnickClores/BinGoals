@@ -1,6 +1,7 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Ionicons } from "@expo/vector-icons";
 
 type RootStackParamList = {
   Home: undefined;
@@ -17,7 +18,7 @@ const CreateBingoalCardButton = () => {
       style={styles.button}
       onPress={() => navigation.navigate("BingoalCard")}
     >
-      <Text style={styles.buttonText}>+</Text>
+      <Ionicons name="add-outline" size={32} color="#fff" />
     </TouchableOpacity>
   );
 };

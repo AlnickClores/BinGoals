@@ -71,31 +71,43 @@ const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    padding: 10,
-    backgroundColor: "#fff",
+    padding: 24,
     alignItems: "center",
   },
   row: {
     flexDirection: "row",
   },
   cell: {
-    width: 60,
-    height: 60,
-    borderWidth: 1,
-    borderColor: "#999",
+    width: 65,
+    height: 65,
+    borderWidth: 1.5,
+    borderColor: "#e2e8f0",
     justifyContent: "center",
     alignItems: "center",
-    margin: 3,
-    borderRadius: 5,
-    backgroundColor: "#eee",
+    margin: 2,
+    borderRadius: 12,
+    backgroundColor: "#f8fafc",
+    shadowColor: "#64748b",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   freeCell: {
-    backgroundColor: "#cdeffd",
+    backgroundColor: "#ddd6fe",
+    borderColor: "#a78bfa",
+    borderWidth: 2,
   },
   cellText: {
     textAlign: "center",
-    fontSize: 12,
-    fontWeight: "bold",
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#374151",
+    lineHeight: 14,
+    paddingHorizontal: 2,
   },
 });
 
