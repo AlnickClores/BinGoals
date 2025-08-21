@@ -5,14 +5,11 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
 } from "react-native";
 import BingoCard from "../components/BingoCard";
-import DeleteBingoalCardButton from "../components/DeleteBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
   Home: undefined;
@@ -45,15 +42,6 @@ const BingoalCardDetailScreen = ({ route }: any) => {
     setIsEditing(false);
   };
 
-  const showDeleteToast = () => {
-    Toast.show({
-      type: "success",
-      text1: "Bingoal Card Deleted",
-      text2: "Your bingoal card has been deleted.",
-      position: "bottom",
-    });
-  };
-
   const saveBingoalCard = async () => {
     try {
       const updatedCard = {
@@ -76,44 +64,6 @@ const BingoalCardDetailScreen = ({ route }: any) => {
     } catch (error) {
       console.error("Error updating bingoal card:", error);
     }
-  };
-
-  const deleteBingoalCard = () => {
-    Alert.alert(
-      "Delete Card?",
-      "Are you sure you want to delete this bingo card?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              const existingCardsJson = await AsyncStorage.getItem(
-                "bingoalCards"
-              );
-              const existingCards = existingCardsJson
-                ? JSON.parse(existingCardsJson)
-                : [];
-
-              const updatedCards = existingCards.filter(
-                (existingCard: any) => existingCard.id !== card.id
-              );
-
-              await AsyncStorage.setItem(
-                "bingoalCards",
-                JSON.stringify(updatedCards)
-              );
-
-              showDeleteToast();
-              navigation.navigate("Dashboard");
-            } catch (error) {
-              console.error("Error deleting bingoal card:", error);
-            }
-          },
-        },
-      ]
-    );
   };
 
   useEffect(() => {

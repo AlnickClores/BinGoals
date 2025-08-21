@@ -15,6 +15,12 @@ const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setInputText] = useState("");
 
+  const [completedGoals, setCompletedGoals] = useState<boolean[][]>(
+    Array(5)
+      .fill(null)
+      .map(() => Array(5).fill(false))
+  );
+
   const handleBoxPress = (row: number, col: number) => {
     if (row === 2 && col === 2) return;
     setSelectedBox({ row, col });
@@ -49,6 +55,9 @@ const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
               style={[
                 styles.cell,
                 rowIndex === 2 && colIndex === 2 && styles.freeCell,
+                completedGoals[rowIndex][colIndex]
+                  ? styles.completedCell
+                  : null,
               ]}
               onPress={() => handleBoxPress(rowIndex, colIndex)}
               disabled={rowIndex === 2 && colIndex === 2}
@@ -64,6 +73,17 @@ const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
         inputText={inputText}
         setInputText={setInputText}
         handleSaveGoal={handleSaveGoal}
+        isDone={
+          selectedBox ? completedGoals[selectedBox.row][selectedBox.col] : false
+        }
+        handleMarkAsDone={() => {
+          if (selectedBox) {
+            const newCompletedGoals = [...completedGoals];
+            newCompletedGoals[selectedBox.row][selectedBox.col] =
+              !newCompletedGoals[selectedBox.row][selectedBox.col];
+            setCompletedGoals(newCompletedGoals);
+          }
+        }}
       />
     </View>
   );
@@ -100,6 +120,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#ddd6fe",
     borderColor: "#a78bfa",
     borderWidth: 2,
+  },
+  completedCell: {
+    backgroundColor: "#22c55e",
+    borderColor: "#16a34a",
   },
   cellText: {
     textAlign: "center",
