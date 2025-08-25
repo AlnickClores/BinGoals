@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import CreateBingoalCardButton from "../components/CreateBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -170,7 +169,6 @@ const DashboardScreen = () => {
         handleDelete={handleDelete}
         closeModal={closeModal}
       />
-      <CreateBingoalCardButton />
     </View>
   );
 };
