@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 import BingoCard from "../components/BingoCard";
 import SaveBingoalCardButton from "../components/SaveBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Toast from "react-native-toast-message";
 
@@ -23,7 +23,51 @@ const DOUBLE_CLICK_DELAY = 300;
 const BingoalCardScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [bingoalCardName, setBingoalCardName] = useState("Life Goals");
+
+  const [cardCount, setCardCount] = useState(0);
+
+  const generateDefaultCardName = (count: number) => {
+    return `Goal #${count + 1}`;
+  };
+
+  const DEFAULT_GOALS = Array(5)
+    .fill(null)
+    .map((_, row) =>
+      Array(5)
+        .fill("")
+        .map((_, col) => (row === 2 && col === 2 ? "YOU CAN DO IT!" : ""))
+    );
+
+  const [bingoalCardName, setBingoalCardName] = useState(
+    generateDefaultCardName(cardCount)
+  );
+  const [goals, setGoals] = useState<string[][]>(DEFAULT_GOALS);
+
+  const loadCardCount = async () => {
+    try {
+      const existingCardsJson = await AsyncStorage.getItem("bingoalCards");
+      const existingCards = existingCardsJson
+        ? JSON.parse(existingCardsJson)
+        : [];
+      const count = existingCards.length;
+      setCardCount(count);
+      setBingoalCardName(generateDefaultCardName(count));
+    } catch (error) {
+      console.error("Error loading card count:", error);
+      setCardCount(0);
+      setBingoalCardName(generateDefaultCardName(0));
+    }
+  };
+
+  useEffect(() => {
+    loadCardCount();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadCardCount();
+    }, [])
+  );
 
   const showCreateToast = () => {
     Toast.show({
@@ -33,15 +77,6 @@ const BingoalCardScreen = () => {
       position: "bottom",
     });
   };
-  const [goals, setGoals] = useState<string[][]>(
-    Array(5)
-      .fill(null)
-      .map((_, row) =>
-        Array(5)
-          .fill("")
-          .map((_, col) => (row === 2 && col === 2 ? "YOU CAN DO IT!" : ""))
-      )
-  );
 
   const [isEditing, setIsEditing] = useState(false);
   const lastTap = useRef<number | null>(null);
@@ -57,6 +92,14 @@ const BingoalCardScreen = () => {
   };
 
   const handleBlur = () => {
+    setIsEditing(false);
+  };
+
+  const resetCardToDefaults = () => {
+    const newCount = cardCount + 1;
+    setCardCount(newCount);
+    setBingoalCardName(generateDefaultCardName(newCount));
+    setGoals(DEFAULT_GOALS);
     setIsEditing(false);
   };
 
@@ -82,9 +125,17 @@ const BingoalCardScreen = () => {
 
       showCreateToast();
 
+      resetCardToDefaults();
+
       navigation.navigate("Dashboard");
     } catch (error) {
       console.error("Error saving bingoal card:", error);
+      Toast.show({
+        type: "error",
+        text1: "Save Failed",
+        text2: "Failed to save your bingoal card. Please try again.",
+        position: "bottom",
+      });
     }
   };
 
