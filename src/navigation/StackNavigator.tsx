@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
-import DashboardScreen from "../screens/DashboardScreen";
 import BingoalCardScreen from "../screens/BingoalCardScreen";
 import BingoalCardDetailScreen from "../screens/BingoalCardDetailScreen";
+import TabNavigator from "./TabNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +16,7 @@ const StackNavigator = () => {
       />
       <Stack.Screen
         name="Dashboard"
-        component={DashboardScreen}
+        component={TabNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen

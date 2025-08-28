@@ -124,7 +124,6 @@ const BingoalCardScreen = () => {
       console.log("Bingoal card saved successfully!");
 
       showCreateToast();
-
       resetCardToDefaults();
 
       navigation.navigate("Dashboard");
