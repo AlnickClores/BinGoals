@@ -23,12 +23,4 @@ export const achievements = [
     title: "Getting Organized",
     description: "Add 10 goals across any cards.",
   },
-  {
-    title: "Oops, Wrong Goal",
-    description: "Delete a goal you just added.",
-  },
-  {
-    title: "Who needs sleep?",
-    description: "Add or complete a goal after midnight.",
-  },
 ];

@@ -11,6 +11,7 @@ import SaveBingoalCardButton from "../components/SaveBingoalCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { checkAchievements } from "../logic/achievementCheckers";
 import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
@@ -125,6 +126,12 @@ const BingoalCardScreen = () => {
 
       const updatedCards = [...existingCards, cardData];
 
+      const unlocked = checkAchievements(updatedCards);
+
+      await AsyncStorage.setItem(
+        "unlockedAchievements",
+        JSON.stringify(unlocked)
+      );
       await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
 
       console.log("Bingoal card saved successfully!");

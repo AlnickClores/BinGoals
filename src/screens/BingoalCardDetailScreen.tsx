@@ -9,6 +9,8 @@ import {
 import BingoCard from "../components/BingoCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { checkAchievements } from "../logic/achievementCheckers";
+
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
@@ -67,6 +69,12 @@ const BingoalCardDetailScreen = ({ route }: any) => {
         existingCard.id === card.id ? updatedCard : existingCard
       );
 
+      const unlocked = checkAchievements(existingCards);
+
+      await AsyncStorage.setItem(
+        "unlockedAchievements",
+        JSON.stringify(unlocked)
+      );
       await AsyncStorage.setItem("bingoalCards", JSON.stringify(updatedCards));
     } catch (error) {
       console.error("Error updating bingoal card:", error);
