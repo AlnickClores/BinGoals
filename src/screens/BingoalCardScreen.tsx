@@ -43,6 +43,12 @@ const BingoalCardScreen = () => {
   );
   const [goals, setGoals] = useState<string[][]>(DEFAULT_GOALS);
 
+  const [completedGoals, setCompletedGoals] = useState(
+    Array(5)
+      .fill(null)
+      .map(() => Array(5).fill(false))
+  );
+
   const loadCardCount = async () => {
     try {
       const existingCardsJson = await AsyncStorage.getItem("bingoalCards");
@@ -153,7 +159,12 @@ const BingoalCardScreen = () => {
           <Text style={styles.bingoalCardName}>{bingoalCardName}</Text>
         </TouchableOpacity>
       )}
-      <BingoCard goals={goals} setGoals={setGoals} />
+      <BingoCard
+        goals={goals}
+        setGoals={setGoals}
+        completedGoals={completedGoals}
+        setCompletedGoals={setCompletedGoals}
+      />
       <SaveBingoalCardButton onPress={saveBingoalCard} />
     </View>
   );

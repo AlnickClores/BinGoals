@@ -5,21 +5,22 @@ import GoalModal from "./GoalModal";
 type BingoCardProps = {
   goals: string[][];
   setGoals: React.Dispatch<React.SetStateAction<string[][]>>;
+  completedGoals: boolean[][];
+  setCompletedGoals: React.Dispatch<React.SetStateAction<boolean[][]>>;
 };
 
-const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
+const BingoCard = ({
+  goals,
+  setGoals,
+  completedGoals,
+  setCompletedGoals,
+}: BingoCardProps) => {
   const [selectedBox, setSelectedBox] = useState<{
     row: number;
     col: number;
   } | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setInputText] = useState("");
-
-  const [completedGoals, setCompletedGoals] = useState<boolean[][]>(
-    Array(5)
-      .fill(null)
-      .map(() => Array(5).fill(false))
-  );
 
   const handleBoxPress = (row: number, col: number) => {
     if (row === 2 && col === 2) return;
@@ -78,9 +79,13 @@ const BingoCard = ({ goals, setGoals }: BingoCardProps) => {
         }
         handleMarkAsDone={() => {
           if (selectedBox) {
-            const newCompletedGoals = [...completedGoals];
-            newCompletedGoals[selectedBox.row][selectedBox.col] =
-              !newCompletedGoals[selectedBox.row][selectedBox.col];
+            const newCompletedGoals = completedGoals.map((rowArr, rowIndex) =>
+              rowArr.map((done, colIndex) =>
+                rowIndex === selectedBox.row && colIndex === selectedBox.col
+                  ? !done
+                  : done
+              )
+            );
             setCompletedGoals(newCompletedGoals);
           }
         }}

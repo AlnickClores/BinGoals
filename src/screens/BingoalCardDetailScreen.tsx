@@ -24,6 +24,12 @@ const BingoalCardDetailScreen = ({ route }: any) => {
   const { card } = route.params;
   const [bingoalCardName, setBingoalCardName] = useState(card.name);
   const [goals, setGoals] = useState<string[][]>(card.goals);
+  const [completedGoals, setCompletedGoals] = useState<boolean[][]>(
+    card.completedGoals ||
+      Array(5)
+        .fill(null)
+        .map(() => Array(5).fill(false))
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const lastTap = useRef<number | null>(null);
@@ -48,6 +54,7 @@ const BingoalCardDetailScreen = ({ route }: any) => {
         ...card,
         name: bingoalCardName,
         goals,
+        completedGoals,
         updatedAt: new Date().toISOString(),
       };
 
@@ -74,7 +81,7 @@ const BingoalCardDetailScreen = ({ route }: any) => {
     return () => {
       if (saveTimeout.current) clearTimeout(saveTimeout.current);
     };
-  }, [bingoalCardName, goals]);
+  }, [bingoalCardName, goals, completedGoals]);
 
   return (
     <View style={styles.container}>
@@ -91,7 +98,12 @@ const BingoalCardDetailScreen = ({ route }: any) => {
           <Text style={styles.bingoalCardName}>{bingoalCardName}</Text>
         </TouchableOpacity>
       )}
-      <BingoCard goals={goals} setGoals={setGoals} />
+      <BingoCard
+        goals={goals}
+        setGoals={setGoals}
+        completedGoals={completedGoals}
+        setCompletedGoals={setCompletedGoals}
+      />
     </View>
   );
 };
