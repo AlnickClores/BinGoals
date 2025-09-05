@@ -148,8 +148,8 @@ const DashboardScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>My Bingoals 🎯</Text>
       <View style={styles.bingoCardsContainer}>
-        <Text style={styles.title}>Your Bingoal Cards</Text>
         {bingoalCards.length > 0 ? (
           <FlatList
             data={bingoalCards}
@@ -159,7 +159,8 @@ const DashboardScreen = () => {
           />
         ) : (
           <Text style={styles.emptyMessage}>
-            No bingoal cards created yet. Create your first one!
+            No bingoal cards created yet. {"\n"}
+            Create your first one!
           </Text>
         )}
       </View>
@@ -178,28 +179,20 @@ export default DashboardScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 20,
+    paddingTop: 80,
     backgroundColor: "#f8fafc",
   },
-  text: {
-    fontSize: 24,
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 16,
+    color: "#1e293b",
   },
   bingoCardsContainer: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f8fafc",
     width: "100%",
-    padding: 24,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 32,
-    textAlign: "center",
-    color: "#1e293b",
-    letterSpacing: -0.5,
   },
   cardsList: {
     maxHeight: "70%",

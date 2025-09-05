@@ -17,7 +17,7 @@ const TabNavigator = () => {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Create Bingoal") {
             iconName = focused ? "add" : "add-outline";
-          } else if (route.name === "Achievement") {
+          } else if (route.name === "Achievements") {
             iconName = focused ? "trophy" : "trophy-outline";
           }
 
@@ -30,7 +30,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Dashboard" component={DashboardStack} />
       <Tab.Screen name="Create Bingoal" component={BingoalCardScreen} />
-      <Tab.Screen name="Achievement" component={AchievementScreen} />
+      <Tab.Screen name="Achievements" component={AchievementScreen} />
     </Tab.Navigator>
   );
 };

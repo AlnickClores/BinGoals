@@ -1,7 +1,8 @@
-import React, { View, Text, StyleSheet, FlatList } from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { achievements } from "../data/achievements";
 
 const AchievementScreen = () => {
   const [unlockedAchievements, setUnlockedAchievements] = useState<any[]>([]);
@@ -9,7 +10,6 @@ const AchievementScreen = () => {
   const loadAchievements = async () => {
     const json = await AsyncStorage.getItem("unlockedAchievements");
     const unlocked = json ? JSON.parse(json) : [];
-    console.log("🎉 Reloaded achievements:", unlocked);
     setUnlockedAchievements(unlocked);
   };
 
@@ -19,12 +19,26 @@ const AchievementScreen = () => {
     }, [])
   );
 
+  // useEffect(() => {
+  //   const printStorage = async () => {
+  //     await AsyncStorage.clear();
+  //     const keys = await AsyncStorage.getAllKeys();
+  //     const stores = await AsyncStorage.multiGet(keys);
+  //     console.log("AsyncStorage contents:");
+  //     stores.forEach(([key, value]) => {
+  //       console.log(`  ${key}: ${value}`);
+  //     });
+  //   };
+  //   printStorage();
+  // }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Achievements 🏆</Text>
       {unlockedAchievements.length === 0 ? (
-        <Text style={{ color: "#6b7280", marginBottom: 20 }}>
-          No achievements unlocked yet. Complete goals to unlock achievements!
+        <Text style={styles.emptyText}>
+          No achievements unlocked yet. {"\n"} Complete goals to unlock
+          achievements!
         </Text>
       ) : (
         <FlatList
@@ -32,10 +46,14 @@ const AchievementScreen = () => {
           keyExtractor={(item) => item.title}
           renderItem={({ item }) => (
             <View style={styles.achievementCard}>
-              <Text style={styles.achievementTitle}>{item.title}</Text>
-              <Text style={styles.achievementDesc}>{item.description}</Text>
+              <Text style={styles.achievementIcon}>{item.icon}</Text>
+              <View style={styles.achievementContent}>
+                <Text style={styles.achievementTitle}>{item.title}</Text>
+                <Text style={styles.achievementDesc}>{item.description}</Text>
+              </View>
             </View>
           )}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>
@@ -57,7 +75,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#1e293b",
   },
+  emptyText: {
+    color: "#6b7280",
+    marginBottom: 20,
+    textAlign: "center",
+    fontSize: 16,
+    lineHeight: 24,
+  },
   achievementCard: {
+    flexDirection: "row",
+    alignItems: "center",
     padding: 16,
     borderRadius: 12,
     backgroundColor: "#fff",
@@ -65,8 +92,32 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 1,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
   },
-  achievementTitle: { fontSize: 16, fontWeight: "700", color: "#374151" },
-  achievementDesc: { fontSize: 14, color: "#6b7280" },
+  achievementIcon: {
+    fontSize: 32,
+    marginRight: 16,
+    textAlign: "center",
+    minWidth: 40,
+  },
+  achievementContent: {
+    flex: 1,
+  },
+  achievementTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#374151",
+    marginBottom: 4,
+  },
+  achievementDesc: {
+    fontSize: 14,
+    color: "#6b7280",
+    lineHeight: 20,
+  },
 });

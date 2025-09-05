@@ -116,6 +116,7 @@ const BingoalCardScreen = () => {
         id: Date.now().toString(),
         name: bingoalCardName,
         goals,
+        completedGoals,
         createdAt: new Date().toISOString(),
       };
 
@@ -126,7 +127,7 @@ const BingoalCardScreen = () => {
 
       const updatedCards = [...existingCards, cardData];
 
-      const unlocked = checkAchievements(updatedCards);
+      const unlocked = checkAchievements(updatedCards) || [];
 
       await AsyncStorage.setItem(
         "unlockedAchievements",
@@ -153,25 +154,28 @@ const BingoalCardScreen = () => {
 
   return (
     <View style={styles.container}>
-      {isEditing ? (
-        <TextInput
-          style={styles.bingoalCardName}
-          value={bingoalCardName}
-          onChangeText={setBingoalCardName}
-          onBlur={handleBlur}
-          autoFocus
+      <Text style={styles.title}>Create Bingoal ✨</Text>
+      <View style={styles.bingoCardContainer}>
+        {isEditing ? (
+          <TextInput
+            style={styles.bingoalCardName}
+            value={bingoalCardName}
+            onChangeText={setBingoalCardName}
+            onBlur={handleBlur}
+            autoFocus
+          />
+        ) : (
+          <TouchableOpacity onPress={handleDoubleTap}>
+            <Text style={styles.bingoalCardName}>{bingoalCardName}</Text>
+          </TouchableOpacity>
+        )}
+        <BingoCard
+          goals={goals}
+          setGoals={setGoals}
+          completedGoals={completedGoals}
+          setCompletedGoals={setCompletedGoals}
         />
-      ) : (
-        <TouchableOpacity onPress={handleDoubleTap}>
-          <Text style={styles.bingoalCardName}>{bingoalCardName}</Text>
-        </TouchableOpacity>
-      )}
-      <BingoCard
-        goals={goals}
-        setGoals={setGoals}
-        completedGoals={completedGoals}
-        setCompletedGoals={setCompletedGoals}
-      />
+      </View>
       <SaveBingoalCardButton onPress={saveBingoalCard} />
     </View>
   );
@@ -182,12 +186,24 @@ export default BingoalCardScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    padding: 20,
+    paddingTop: 80,
+    backgroundColor: "#f8fafc",
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 16,
+    color: "#1e293b",
   },
   bingoalCardName: {
     fontSize: 30,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  bingoCardContainer: {
+    flex: 1,
+    justifyContent: "center",
+    marginBottom: 50,
   },
 });
