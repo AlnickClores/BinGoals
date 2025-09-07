@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   freeCell: {
-    backgroundColor: "#ddd6fe",
-    borderColor: "#a78bfa",
+    backgroundColor: "#a0c3faff",
+    borderColor: "#3b82f6",
     borderWidth: 2,
   },
   completedCell: {

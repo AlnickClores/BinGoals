@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   cardGoalsCount: {
     fontSize: 14,
-    color: "#6366f1",
+    color: "#3b82f6",
     fontWeight: "500",
     marginBottom: 4,
   },

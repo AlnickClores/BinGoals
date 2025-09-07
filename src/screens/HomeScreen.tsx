@@ -22,13 +22,10 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/images/bingoal-logo.png")}
+        source={require("../assets/images/bingoal.png")}
         style={styles.logo}
         resizeMode="contain"
       />
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>BinGoals</Text>
-      </View>
     </View>
   );
 };
@@ -40,18 +37,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f1fafb",
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
+    backgroundColor: "rgb(49, 145, 254)",
   },
   logo: {
     width: 220,
     height: 220,
-  },
-  titleContainer: {
-    position: "absolute",
-    bottom: 50,
   },
 });
